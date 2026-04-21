@@ -1,0 +1,172 @@
+{
+  "$schema": "./node_modules/oh-my-opencode/assets/oh-my-opencode.schema.json",
+
+  // Model Configuration for Credit Agents
+  // All credit agents now use kimi-latest as default
+  "agents": {
+    // Planning/Orchestration Agents - Kimi Latest
+    // credit-worker: Main orchestrator - delegates but doesn't directly edit files
+    "credit-worker": {
+      "model": "kimi-latest",
+      "temperature": 0.1,
+      "fallback_models": [
+        "kimi-k2.5",
+        "claude-opus-4-6",
+        "gpt-5.4"
+      ],
+      "file_permissions": {
+        "deny": ["**/*.hs", "**/*.cabal", "**/*.yaml", "**/src/**", "**/test/**"]
+      }
+    },
+    // credit-planner: Only writes to .agentic-loop/plans/*.md
+    "credit-planner": {
+      "model": "kimi-latest",
+      "temperature": 0.1,
+      "fallback_models": [
+        "kimi-k2.5",
+        "claude-opus-4-6",
+        "gpt-5.4"
+      ],
+      "file_permissions": {
+        "allow": [".agentic-loop/plans/**"],
+        "deny": ["**/*"]
+      }
+    },
+    // credit-plan-reviewer: Read-only - no file writes
+    "credit-plan-reviewer": {
+      "model": "kimi-latest",
+      "temperature": 0.1,
+      "fallback_models": [
+        "kimi-k2.5",
+        "gpt-5.4",
+        "claude-opus-4-6"
+      ],
+      "file_permissions": {
+        "deny": ["**/*"]
+      }
+    },
+
+    // Building Agent - Kimi Latest
+    // credit-executor: Full access for implementation
+    "credit-executor": {
+      "model": "kimi-latest",
+      "temperature": 0.1,
+      "fallback_models": [
+        "glm-5",
+        "claude-opus-4-6",
+        "gpt-5.3-codex"
+      ],
+      "file_permissions": {
+        "allow": ["**/*"]
+      }
+    },
+
+    // Testing Agent - Kimi Latest
+    // credit-tester: Read-only validation
+    "credit-tester": {
+      "model": "kimi-latest",
+      "temperature": 0.1,
+      "fallback_models": [
+        "minimax-m2",
+        "claude-sonnet-4-6",
+        "gpt-5.4"
+      ],
+      "file_permissions": {
+        "deny": ["**/*"]
+      }
+    },
+    // credit-server: Full access for infrastructure operations
+    "credit-server": {
+      "model": "kimi-latest",
+      "temperature": 0,
+      "fallback_models": [
+        "open-large"
+      ],
+      "file_permissions": {
+        "allow": ["**/*"]
+      }
+    },
+
+    // Built-in agents - use your available models
+    "explore": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "minimax-m2"
+      ]
+    },
+    "librarian": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "minimax-m2"
+      ]
+    },
+    "oracle": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "gpt-5.4",
+        "claude-opus-4-6"
+      ]
+    },
+    "hephaestus": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "gpt-5.3-codex"
+      ]
+    },
+    "metis": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "gpt-5.4"
+      ]
+    },
+    "momus": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "claude-opus-4-6"
+      ]
+    },
+    "atlas": {
+      "model": "kimi-latest",
+      "fallback_models": [
+        "gpt-5.4"
+      ]
+    }
+  },
+
+  // Categories using your available models
+  "categories": {
+    "deep": {
+      "fallback_models": [
+        "kimi-latest",
+        "glm-5"
+      ]
+    },
+    "quick": {
+      "fallback_models": [
+        "minimax-m2"
+      ]
+    },
+    "unspecified-low": {
+      "fallback_models": [
+        "minimax-m2",
+        "glm-4.7-flash"
+      ]
+    },
+    "unspecified-high": {
+      "fallback_models": [
+        "kimi-latest",
+        "glm-5"
+      ]
+    }
+  },
+
+  // Default model for general use
+  "claude_code": {
+    "default_model": "kimi-latest"
+  },
+
+  // Experimental features
+  "experimental": {
+    "preemptive_compaction": true
+  }
+}

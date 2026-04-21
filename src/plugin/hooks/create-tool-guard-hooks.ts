@@ -11,9 +11,12 @@ import {
   createRulesInjectorHook,
   createTasksTodowriteDisablerHook,
   createWriteExistingFileGuardHook,
+  createEulerWorkflowGuardHook,
   createHashlineReadEnhancerHook,
   createReadImageResizerHook,
   createJsonErrorRecoveryHook,
+  createFileAccessHook,
+  createAgentFilePermissionsHook,
 } from "../../hooks"
 import {
   getOpenCodeVersion,
@@ -32,9 +35,11 @@ export type ToolGuardHooks = {
   rulesInjector: ReturnType<typeof createRulesInjectorHook> | null
   tasksTodowriteDisabler: ReturnType<typeof createTasksTodowriteDisablerHook> | null
   writeExistingFileGuard: ReturnType<typeof createWriteExistingFileGuardHook> | null
+  eulerWorkflowGuard: ReturnType<typeof createEulerWorkflowGuardHook> | null
   hashlineReadEnhancer: ReturnType<typeof createHashlineReadEnhancerHook> | null
   jsonErrorRecovery: ReturnType<typeof createJsonErrorRecoveryHook> | null
   readImageResizer: ReturnType<typeof createReadImageResizerHook> | null
+  agentFilePermissions: ReturnType<typeof createAgentFilePermissionsHook> | null
 }
 
 export function createToolGuardHooks(args: {
@@ -99,6 +104,10 @@ export function createToolGuardHooks(args: {
     ? safeHook("write-existing-file-guard", () => createWriteExistingFileGuardHook(ctx))
     : null
 
+  const eulerWorkflowGuard = isHookEnabled("euler-workflow-guard")
+    ? safeHook("euler-workflow-guard", () => createEulerWorkflowGuardHook(ctx))
+    : null
+
   const hashlineReadEnhancer = isHookEnabled("hashline-read-enhancer")
     ? safeHook("hashline-read-enhancer", () => createHashlineReadEnhancerHook(ctx, { hashline_edit: { enabled: pluginConfig.hashline_edit ?? false } }))
     : null
@@ -111,6 +120,10 @@ export function createToolGuardHooks(args: {
     ? safeHook("read-image-resizer", () => createReadImageResizerHook(ctx))
     : null
 
+  const agentFilePermissions = isHookEnabled("agent-file-permissions")
+    ? safeHook("agent-file-permissions", () => createAgentFilePermissionsHook(ctx, pluginConfig))
+    : null
+
   return {
     commentChecker,
     toolOutputTruncator,
@@ -120,8 +133,10 @@ export function createToolGuardHooks(args: {
     rulesInjector,
     tasksTodowriteDisabler,
     writeExistingFileGuard,
+    eulerWorkflowGuard,
     hashlineReadEnhancer,
     jsonErrorRecovery,
     readImageResizer,
+    agentFilePermissions,
   }
 }
