@@ -40,8 +40,16 @@ Intent Detection (EXACT matching):
 - "start", "up", "launch", "run" → STARTUP flow
 - "stop", "down", "shutdown", "kill" → SHUTDOWN flow
 - "restart", "reset" → SHUTDOWN → STARTUP
+- "restart only lsp" → RESTART flow (euler-lsp only)
+- "restart only gateway" → RESTART flow (euler-lsp-api-gateway only)
+- "restart only db" → RESTART flow (lsp-db only)
 - "status", "health", "check" → STATUS flow
 - "clean", "cleanup" → CLEANUP flow
+
+Service Name Mapping (for "restart only <service>"):
+- "lsp" → euler-lsp
+- "gateway" → euler-lsp-api-gateway
+- "db" or "postgres" → lsp-db
 
 If intent unclear: ASK user for clarification. Do NOT guess.
 </Execution_Mode>
@@ -157,6 +165,35 @@ exit 1
 - If Step 2 confirms all 9 services are "Running", STOP IMMEDIATELY and report success.
 - DO NOT run additional curl/pg_isready/redis-cli commands.
 - The process-compose status is the single source of truth.
+
+## Individual Service Restart (Process-compose API)
+
+When user wants to restart ONLY a specific service (not everything):
+
+**Step 1: Map user-friendly names to process-compose service names**
+- "lsp" or "euler-lsp" → euler-lsp
+- "gateway" or "api-gateway" → euler-lsp-api-gateway
+- "db" or "postgres" → lsp-db
+
+**Step 2: Call process-compose restart endpoint**
+\`\`\`bash
+# Restart a specific service via process-compose API
+curl -sf --unix-socket services.sock -X POST http://localhost/process/restart/{svcname}
+\`\`\`
+
+Where \`{svcname}\` is one of: \`euler-lsp\`, \`euler-lsp-api-gateway\`, \`lsp-db\`
+
+**Step 3: Verify the restart was initiated**
+- Check HTTP response status (200 = success)
+- If successful, report: "Restarting {svcname}..."
+- If failed, report the error and check if services are running
+
+**Available Restart Targets:**
+- euler-lsp (main LSP server)
+- euler-lsp-api-gateway (API gateway)
+- lsp-db (PostgreSQL database)
+
+**Note:** Redis cluster nodes are managed as a group - restarting individual nodes is not supported via this API.
 
 ## Access Points (For Reference Only - DO NOT use for startup verification)
 

@@ -7,7 +7,7 @@ import { buildDefaultCreditTesterPrompt } from "./default"
 
 const MODE: AgentMode = "primary"
 
-const BLOCKED_TOOLS = ["edit", "apply_patch"]
+const BLOCKED_TOOLS = ["apply_patch"]
 
 export const CREDIT_TESTER_DEFAULTS = {
   model: "kimi-latest",

@@ -62,7 +62,7 @@
     },
 
     // Testing Agent - Kimi Latest
-    // credit-tester: Read-only validation
+    // credit-tester: Writes test reports to .agentic-loop/test-reports/
     "credit-tester": {
       "model": "kimi-latest",
       "temperature": 0.1,
@@ -72,6 +72,7 @@
         "gpt-5.4"
       ],
       "file_permissions": {
+        "allow": [".agentic-loop/test-reports/**"],
         "deny": ["**/*"]
       }
     },
