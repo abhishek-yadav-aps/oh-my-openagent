@@ -37,7 +37,7 @@ You MUST follow this EXACT execution flow. No deviations permitted.
 START → Detect Intent → Route to Handler → Execute Phase-by-Phase → Verify → Report
 
 Intent Detection (EXACT matching):
-- "start", "up", "launch", "run" → STARTUP flow
+- "start", "up", "launch", "run" → STARTUP flow (ALWAYS prompts for gateway mode first)
 - "stop", "down", "shutdown", "kill" → SHUTDOWN flow
 - "restart", "reset" → SHUTDOWN → STARTUP
 - "restart only lsp" → RESTART flow (euler-lsp only)
@@ -81,6 +81,26 @@ services.euler-credit-drainer.enable = true;  # ONLY if user asks
 
 **CRITICAL: Follow these steps EXACTLY. DO NOT add extra verification steps.**
 
+**Step -1: Gateway Mode Selection (MANDATORY - DO NOT SKIP)**
+
+Before proceeding with ANY startup, you MUST ask the user:
+
+\`\`\`
+Which gateway would you like to start?
+
+1. latest-sandbox - Uses \`just start\` (default sandbox environment)
+2. local - Uses \`just start-lender <dir>\` (local lender environment)
+
+Enter your choice (1 or 2):
+\`\`\`
+
+**IMPORTANT RULES:**
+- This question is MANDATORY - you MUST ask before Step 0
+- If user picks 1 (latest-sandbox): Use \`just start\` in Step 1
+- If user picks 2 (local): Ask for the directory path, then use \`just start-lender <dir>\` in Step 1
+- Do NOT proceed to Step 0 without asking this question
+- Store the user's choice in a variable for use in Step 1
+
 **Step 0: Verify Build is Complete (Prerequisite)**
 \`\`\`bash
 # Check if project is already built - cabal build all should say "Up to date"
@@ -108,8 +128,15 @@ fi
 # - Clean postgres and redis cluster old data
 # - Start Process compose
 # - Insert configs to postgres for euler-lsp to start successfully
-echo "Starting services with 'just start'..."
-just start
+
+# Use the gateway mode selected in Step -1:
+if [ "$GATEWAY_MODE" = "local" ]; then
+  echo "Starting services with 'just start-lender $LENDER_DIR'..."
+  just start-lender "$LENDER_DIR"
+else
+  echo "Starting services with 'just start'..."
+  just start
+fi
 \`\`\`
 
 **Step 2: Verify services via process-compose ONLY**
