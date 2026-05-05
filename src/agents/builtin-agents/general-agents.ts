@@ -44,12 +44,16 @@ export function collectPendingBuiltinAgents(input: {
   const availableAgents: AvailableAgent[] = []
   const pendingAgentConfigs: Map<string, AgentConfig> = new Map()
 
+  // Credit agents that should be hidden from agent switch (only accessible via orchestration)
+  const HIDDEN_CREDIT_AGENTS = new Set(["credit-planner", "credit-executor", "credit-plan-reviewer"])
+
   for (const [name, source] of Object.entries(agentSources)) {
     const agentName = name as BuiltinAgentName
 
     if (agentName === "sisyphus") continue
     if (agentName === "hephaestus") continue
     if (agentName === "atlas") continue
+    if (HIDDEN_CREDIT_AGENTS.has(agentName)) continue
     if (disabledAgents.some((name) => name.toLowerCase() === agentName.toLowerCase())) continue
 
     const override = agentOverrides[agentName]

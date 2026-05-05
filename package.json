@@ -1,17 +1,18 @@
 {
-  "name": "oh-my-opencode",
-  "version": "3.11.0",
-  "description": "The Best AI Agent Harness - Batteries-Included OpenCode Plugin with Multi-Model Orchestration, Parallel Background Agents, and Crafted LSP/AST Tools",
+  "name": "credit-agents",
+  "version": "1.0.0",
+  "description": "Credit Agents - Multi-Model AI Agent Harness with Parallel Background Agents, LSP Tools, and Intelligent Orchestration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "oh-my-opencode": "bin/oh-my-opencode.js"
+    "credit-agents": "bin/credit-agents.js"
   },
   "files": [
     "dist",
     "bin",
-    "postinstall.mjs"
+    "postinstall.mjs",
+    "LICENSE.md"
   ],
   "exports": {
     ".": {
@@ -41,16 +42,16 @@
     "ai",
     "llm"
   ],
-  "author": "YeonGyu-Kim",
+  "author": "Prajwal B Tegur",
   "license": "SUL-1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/code-yeongyu/oh-my-openagent.git"
+    "url": "git+https://github.com/prajwalbtegur/credit-agents.git"
   },
   "bugs": {
-    "url": "https://github.com/code-yeongyu/oh-my-openagent/issues"
+    "url": "https://github.com/prajwalbtegur/credit-agents/issues"
   },
-  "homepage": "https://github.com/code-yeongyu/oh-my-openagent#readme",
+  "homepage": "https://github.com/prajwalbtegur/credit-agents#readme",
   "dependencies": {
     "@ast-grep/cli": "^0.40.0",
     "@ast-grep/napi": "^0.40.0",

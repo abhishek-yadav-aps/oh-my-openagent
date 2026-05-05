@@ -154,21 +154,8 @@ export async function createBuiltinAgents(
     })
   }
 
-  if (!disabledAgentNames.has("credit-planner") && agentMetadata["credit-planner"]) {
-    availableAgents.push({
-      name: "credit-planner",
-      description: "Feature implementation planner for Agentic Loop. Analyzes requests, explores codebase, generates structured Change Plans with files, APIs, DB changes, and test flows. (CreditPlanner - OhMyOpenCode)",
-      metadata: agentMetadata["credit-planner"],
-    })
-  }
-
-  if (!disabledAgentNames.has("credit-executor") && agentMetadata["credit-executor"]) {
-    availableAgents.push({
-      name: "credit-executor",
-      description: "Change Plan executor for Agentic Loop. Implements features exactly as specified in Change Plans. Deterministic execution, no reinterpretation. (CreditExecutor - OhMyOpenCode)",
-      metadata: agentMetadata["credit-executor"],
-    })
-  }
+  // Credit agents: Only credit-tester and credit-server are exposed to users
+  // Other credit agents (credit-planner, credit-executor, credit-plan-reviewer) are used internally
 
   if (!disabledAgentNames.has("credit-tester") && agentMetadata["credit-tester"]) {
     availableAgents.push({
@@ -183,14 +170,6 @@ export async function createBuiltinAgents(
       name: "credit-server",
       description: "LSP server management for euler-lsp with PostgreSQL, Redis, and monitoring. Handles server lifecycle, DB setup, config insertion, and health monitoring. (CreditServer - OhMyOpenCode)",
       metadata: agentMetadata["credit-server"],
-    })
-  }
-
-  if (!disabledAgentNames.has("credit-plan-reviewer") && agentMetadata["credit-plan-reviewer"]) {
-    availableAgents.push({
-      name: "credit-plan-reviewer",
-      description: "Rigorous plan reviewer for Euler LSP. Validates Change Plans for architectural correctness, completeness, and risk assessment. Provides APPROVE/REJECT/CONDITIONAL verdicts. (CreditPlanReviewer - OhMyOpenCode)",
-      metadata: agentMetadata["credit-plan-reviewer"],
     })
   }
 
